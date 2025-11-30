@@ -8,10 +8,20 @@ public class ParameterAdjustZone : MonoBehaviour
     public float minValue = -5f;
     public float maxValue = 5f;
     public float changeSpeed = 1f;
+
+    // Color used for parameter + player, but zone sprite will force alpha = 0.5
+    public Color parameterColor = Color.white;
+
+    [TextArea]
+    public string parameterInfo;
+
+    public float selectDelay = 0.5f;
     public string playerTag = "Player";
 
     IFloatParameterTarget target;
+    PlayerParameterAdjuster currentAdjuster;
     bool playerInside;
+    float insideTime;
 
     void Awake()
     {
@@ -21,45 +31,69 @@ public class ParameterAdjustZone : MonoBehaviour
         var col = GetComponent<Collider2D>();
         if (col != null)
             col.isTrigger = true;
+
+        ApplyZoneColor();
     }
 
     void OnValidate()
     {
         if (targetBehaviour != null)
             target = targetBehaviour as IFloatParameterTarget;
+
+        ApplyZoneColor();
+    }
+
+    void ApplyZoneColor()
+    {
+        var sr = GetComponent<SpriteRenderer>();
+        if (sr != null)
+        {
+            // zone uses same RGB, fixed alpha 0.5
+            var c = parameterColor;
+            sr.color = new Color(c.r, c.g, c.b, 0.5f);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag(playerTag))
-            playerInside = true;
+        if (!other.CompareTag(playerTag))
+            return;
+
+        playerInside = true;
+        insideTime = 0f;
+        currentAdjuster = other.GetComponentInParent<PlayerParameterAdjuster>();
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag(playerTag))
-            playerInside = false;
+        if (!other.CompareTag(playerTag))
+            return;
+
+        playerInside = false;
+        insideTime = 0f;
+        currentAdjuster = null;
     }
 
     void Update()
     {
-        if (!playerInside || target == null)
+        if (!playerInside || target == null || currentAdjuster == null)
             return;
 
-        float input = 0f;
+        insideTime += Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
-            input += 1f;
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-            input -= 1f;
+        if (insideTime >= selectDelay)
+        {
+            currentAdjuster.AssignParameter(
+                target,
+                parameterId,
+                minValue,
+                maxValue,
+                changeSpeed,
+                parameterColor,   // full color (with whatever alpha you set) goes to player
+                parameterInfo
+            );
 
-        if (Mathf.Approximately(input, 0f))
-            return;
-
-        float current = target.GetParameterValue(parameterId);
-        float delta = changeSpeed * input * Time.deltaTime;
-        float newValue = Mathf.Clamp(current + delta, minValue, maxValue);
-
-        target.SetParameterValue(parameterId, newValue);
+            playerInside = false;
+        }
     }
 }
