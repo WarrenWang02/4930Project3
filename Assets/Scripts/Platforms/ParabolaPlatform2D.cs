@@ -19,6 +19,14 @@ public class ParabolaPlatform2D : MonoBehaviour, IFloatParameterTarget
     [Header("Formula UI")]
     public TextMeshProUGUI formulaText;
 
+    [Header("Reset")]
+    public bool enableResetHotkey = true;
+    public KeyCode resetKey = KeyCode.R;
+
+    float initialA;
+    float initialH;
+    float initialK;
+
     LineRenderer lineRenderer;
     EdgeCollider2D edgeCollider;
 
@@ -27,6 +35,10 @@ public class ParabolaPlatform2D : MonoBehaviour, IFloatParameterTarget
         CacheComponents();
         if (lineRenderer != null)
             lineRenderer.useWorldSpace = false;
+
+        initialA = a;
+        initialH = h;
+        initialK = k;
 
         UpdateShape();
     }
@@ -42,6 +54,14 @@ public class ParabolaPlatform2D : MonoBehaviour, IFloatParameterTarget
             resolution = 2;
 
         UpdateShape();
+    }
+
+    void Update()
+    {
+        if (enableResetHotkey && Input.GetKeyDown(resetKey))
+        {
+            ResetPlatform();
+        }
     }
 
     void CacheComponents()
@@ -188,6 +208,14 @@ public class ParabolaPlatform2D : MonoBehaviour, IFloatParameterTarget
                 break;
         }
 
+        UpdateShape();
+    }
+
+    public void ResetPlatform()
+    {
+        a = initialA;
+        h = initialH;
+        k = initialK;
         UpdateShape();
     }
 }
