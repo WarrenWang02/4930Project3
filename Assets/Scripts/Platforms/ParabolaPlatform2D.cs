@@ -3,7 +3,7 @@ using TMPro;
 
 [RequireComponent(typeof(LineRenderer))]
 [RequireComponent(typeof(EdgeCollider2D))]
-public class ParabolaPlatform2D : MonoBehaviour
+public class ParabolaPlatform2D : MonoBehaviour, IFloatParameterTarget
 {
     [Header("Domain (X range)")]
     public float xStart = -5f;
@@ -12,9 +12,9 @@ public class ParabolaPlatform2D : MonoBehaviour
     public int resolution = 32;
 
     [Header("Parabola: y = a(x - h)^2 + k")]
-    public float a = 0f;   // curvature; 0 = flat line
-    public float h = 0f;   // horizontal shift
-    public float k = 0f;   // vertical shift (height)
+    public float a = 0f;
+    public float h = 0f;
+    public float k = 0f;
 
     [Header("Formula UI")]
     public TextMeshProUGUI formulaText;
@@ -102,21 +102,18 @@ public class ParabolaPlatform2D : MonoBehaviour
         if (formulaText == null)
             return;
 
-        // colors for numbers of a, h, k
-        const string colorAHex = "#FF5555"; // red-ish
-        const string colorHHex = "#55FF55"; // green-ish
-        const string colorKHex = "#5555FF"; // blue-ish
+        const string colorAHex = "#FF5555";
+        const string colorHHex = "#55FF55";
+        const string colorKHex = "#5555FF";
 
-        // numeric values as text
         string aNum = FormatFloat(a);
         string hAbs = FormatFloat(Mathf.Abs(h));
         string kAbs = FormatFloat(Mathf.Abs(k));
 
-        // colored versions
         string aColored = Colorize(aNum, colorAHex);
 
         string hColored;
-        string hTerm; // inside parentheses
+        string hTerm;
 
         if (Mathf.Approximately(h, 0f))
         {
@@ -128,7 +125,7 @@ public class ParabolaPlatform2D : MonoBehaviour
             hColored = Colorize(hAbs, colorHHex);
             hTerm = $"(x - {hColored})";
         }
-        else // h < 0
+        else
         {
             hColored = Colorize(hAbs, colorHHex);
             hTerm = $"(x + {hColored})";
@@ -139,20 +136,17 @@ public class ParabolaPlatform2D : MonoBehaviour
 
         if (Mathf.Approximately(k, 0f))
         {
-            // always show + 0, but 0 is colored
             kTerm = $" + {kColored}";
         }
         else if (k > 0f)
         {
             kTerm = $" + {kColored}";
         }
-        else // k < 0
+        else
         {
             kTerm = $" - {kColored}";
         }
 
-        // final one-line formula, e.g.:
-        // y = 0(x - 0)² + 0   with each 0 colored
         string equation = $"y = {aColored}{hTerm}²{kTerm}";
 
         formulaText.text = equation;
@@ -166,5 +160,34 @@ public class ParabolaPlatform2D : MonoBehaviour
     string Colorize(string text, string hex)
     {
         return $"<color={hex}>{text}</color>";
+    }
+
+    public float GetParameterValue(string parameterId)
+    {
+        switch (parameterId)
+        {
+            case "a": return a;
+            case "h": return h;
+            case "k": return k;
+            default: return 0f;
+        }
+    }
+
+    public void SetParameterValue(string parameterId, float value)
+    {
+        switch (parameterId)
+        {
+            case "a":
+                a = value;
+                break;
+            case "h":
+                h = value;
+                break;
+            case "k":
+                k = value;
+                break;
+        }
+
+        UpdateShape();
     }
 }
