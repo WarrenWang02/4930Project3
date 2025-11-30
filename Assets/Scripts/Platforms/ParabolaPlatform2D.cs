@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 [RequireComponent(typeof(LineRenderer))]
 [RequireComponent(typeof(EdgeCollider2D))]
@@ -15,13 +16,18 @@ public class ParabolaPlatform2D : MonoBehaviour
     public float h = 0f;   // horizontal shift
     public float k = 0f;   // vertical shift (height)
 
+    [Header("Formula UI")]
+    public TextMeshProUGUI formulaText;
+
     LineRenderer lineRenderer;
     EdgeCollider2D edgeCollider;
 
     void Awake()
     {
         CacheComponents();
-        lineRenderer.useWorldSpace = false;
+        if (lineRenderer != null)
+            lineRenderer.useWorldSpace = false;
+
         UpdateShape();
     }
 
@@ -73,6 +79,8 @@ public class ParabolaPlatform2D : MonoBehaviour
         lineRenderer.positionCount = resolution;
         lineRenderer.SetPositions(positions);
         edgeCollider.points = colliderPoints;
+
+        UpdateFormulaText();
     }
 
     float EvaluateParabola(float x)
@@ -87,5 +95,76 @@ public class ParabolaPlatform2D : MonoBehaviour
         h = newH;
         k = newK;
         UpdateShape();
+    }
+
+    void UpdateFormulaText()
+    {
+        if (formulaText == null)
+            return;
+
+        // colors for numbers of a, h, k
+        const string colorAHex = "#FF5555"; // red-ish
+        const string colorHHex = "#55FF55"; // green-ish
+        const string colorKHex = "#5555FF"; // blue-ish
+
+        // numeric values as text
+        string aNum = FormatFloat(a);
+        string hAbs = FormatFloat(Mathf.Abs(h));
+        string kAbs = FormatFloat(Mathf.Abs(k));
+
+        // colored versions
+        string aColored = Colorize(aNum, colorAHex);
+
+        string hColored;
+        string hTerm; // inside parentheses
+
+        if (Mathf.Approximately(h, 0f))
+        {
+            hColored = Colorize("0", colorHHex);
+            hTerm = $"(x - {hColored})";
+        }
+        else if (h > 0f)
+        {
+            hColored = Colorize(hAbs, colorHHex);
+            hTerm = $"(x - {hColored})";
+        }
+        else // h < 0
+        {
+            hColored = Colorize(hAbs, colorHHex);
+            hTerm = $"(x + {hColored})";
+        }
+
+        string kColored = Colorize(kAbs, colorKHex);
+        string kTerm;
+
+        if (Mathf.Approximately(k, 0f))
+        {
+            // always show + 0, but 0 is colored
+            kTerm = $" + {kColored}";
+        }
+        else if (k > 0f)
+        {
+            kTerm = $" + {kColored}";
+        }
+        else // k < 0
+        {
+            kTerm = $" - {kColored}";
+        }
+
+        // final one-line formula, e.g.:
+        // y = 0(x - 0)² + 0   with each 0 colored
+        string equation = $"y = {aColored}{hTerm}²{kTerm}";
+
+        formulaText.text = equation;
+    }
+
+    string FormatFloat(float value)
+    {
+        return value.ToString("0.##");
+    }
+
+    string Colorize(string text, string hex)
+    {
+        return $"<color={hex}>{text}</color>";
     }
 }
