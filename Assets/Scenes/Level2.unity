@@ -352,35 +352,14 @@ GameObject:
   - component: {fileID: 70031550}
   - component: {fileID: 70031549}
   - component: {fileID: 70031548}
-  - component: {fileID: 70031547}
+  - component: {fileID: 70031551}
   m_Layer: 0
-  m_Name: ParabolaPlatform
+  m_Name: VShapePlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &70031547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 70031546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 886eb7da503293f44bc3ccf48e0cf9c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ParabolaPlatform2D
-  xStart: -5
-  xEnd: 5
-  resolution: 32
-  a: 0
-  h: 0
-  k: -1.2
-  formulaText: {fileID: 1059681084}
-  enableResetHotkey: 1
-  resetKey: 114
 --- !u!68 &70031548
 EdgeCollider2D:
   m_ObjectHideFlags: 0
@@ -418,38 +397,38 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: -5, y: -1.2}
-  - {x: -4.677419, y: -1.2}
-  - {x: -4.354839, y: -1.2}
-  - {x: -4.032258, y: -1.2}
-  - {x: -3.7096775, y: -1.2}
-  - {x: -3.387097, y: -1.2}
-  - {x: -3.064516, y: -1.2}
-  - {x: -2.7419355, y: -1.2}
-  - {x: -2.419355, y: -1.2}
-  - {x: -2.0967743, y: -1.2}
-  - {x: -1.7741936, y: -1.2}
-  - {x: -1.451613, y: -1.2}
-  - {x: -1.1290324, y: -1.2}
-  - {x: -0.80645174, y: -1.2}
-  - {x: -0.4838711, y: -1.2}
-  - {x: -0.16129047, y: -1.2}
-  - {x: 0.16129017, y: -1.2}
-  - {x: 0.4838708, y: -1.2}
-  - {x: 0.80645144, y: -1.2}
-  - {x: 1.1290321, y: -1.2}
-  - {x: 1.4516127, y: -1.2}
-  - {x: 1.7741933, y: -1.2}
-  - {x: 2.096774, y: -1.2}
-  - {x: 2.4193547, y: -1.2}
-  - {x: 2.7419353, y: -1.2}
-  - {x: 3.0645158, y: -1.2}
-  - {x: 3.3870964, y: -1.2}
-  - {x: 3.7096772, y: -1.2}
-  - {x: 4.032258, y: -1.2}
-  - {x: 4.3548384, y: -1.2}
-  - {x: 4.677419, y: -1.2}
-  - {x: 4.9999995, y: -1.2}
+  - {x: -5, y: 0}
+  - {x: -4.677419, y: 0}
+  - {x: -4.354839, y: 0}
+  - {x: -4.032258, y: 0}
+  - {x: -3.7096775, y: 0}
+  - {x: -3.387097, y: 0}
+  - {x: -3.064516, y: 0}
+  - {x: -2.7419355, y: 0}
+  - {x: -2.419355, y: 0}
+  - {x: -2.0967743, y: 0}
+  - {x: -1.7741936, y: 0}
+  - {x: -1.451613, y: 0}
+  - {x: -1.1290324, y: 0}
+  - {x: -0.80645174, y: 0}
+  - {x: -0.4838711, y: 0}
+  - {x: -0.16129047, y: 0}
+  - {x: 0.16129017, y: 0}
+  - {x: 0.4838708, y: 0}
+  - {x: 0.80645144, y: 0}
+  - {x: 1.1290321, y: 0}
+  - {x: 1.4516127, y: 0}
+  - {x: 1.7741933, y: 0}
+  - {x: 2.096774, y: 0}
+  - {x: 2.4193547, y: 0}
+  - {x: 2.7419353, y: 0}
+  - {x: 3.0645158, y: 0}
+  - {x: 3.3870964, y: 0}
+  - {x: 3.7096772, y: 0}
+  - {x: 4.032258, y: 0}
+  - {x: 4.3548384, y: 0}
+  - {x: 4.677419, y: 0}
+  - {x: 4.9999995, y: 0}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
@@ -503,38 +482,38 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: -5, y: -1.2, z: 0}
-  - {x: -4.677419, y: -1.2, z: 0}
-  - {x: -4.354839, y: -1.2, z: 0}
-  - {x: -4.032258, y: -1.2, z: 0}
-  - {x: -3.7096775, y: -1.2, z: 0}
-  - {x: -3.387097, y: -1.2, z: 0}
-  - {x: -3.064516, y: -1.2, z: 0}
-  - {x: -2.7419355, y: -1.2, z: 0}
-  - {x: -2.419355, y: -1.2, z: 0}
-  - {x: -2.0967743, y: -1.2, z: 0}
-  - {x: -1.7741936, y: -1.2, z: 0}
-  - {x: -1.451613, y: -1.2, z: 0}
-  - {x: -1.1290324, y: -1.2, z: 0}
-  - {x: -0.80645174, y: -1.2, z: 0}
-  - {x: -0.4838711, y: -1.2, z: 0}
-  - {x: -0.16129047, y: -1.2, z: 0}
-  - {x: 0.16129017, y: -1.2, z: 0}
-  - {x: 0.4838708, y: -1.2, z: 0}
-  - {x: 0.80645144, y: -1.2, z: 0}
-  - {x: 1.1290321, y: -1.2, z: 0}
-  - {x: 1.4516127, y: -1.2, z: 0}
-  - {x: 1.7741933, y: -1.2, z: 0}
-  - {x: 2.096774, y: -1.2, z: 0}
-  - {x: 2.4193547, y: -1.2, z: 0}
-  - {x: 2.7419353, y: -1.2, z: 0}
-  - {x: 3.0645158, y: -1.2, z: 0}
-  - {x: 3.3870964, y: -1.2, z: 0}
-  - {x: 3.7096772, y: -1.2, z: 0}
-  - {x: 4.032258, y: -1.2, z: 0}
-  - {x: 4.3548384, y: -1.2, z: 0}
-  - {x: 4.677419, y: -1.2, z: 0}
-  - {x: 4.9999995, y: -1.2, z: 0}
+  - {x: -5, y: 0, z: 0}
+  - {x: -4.677419, y: 0, z: 0}
+  - {x: -4.354839, y: 0, z: 0}
+  - {x: -4.032258, y: 0, z: 0}
+  - {x: -3.7096775, y: 0, z: 0}
+  - {x: -3.387097, y: 0, z: 0}
+  - {x: -3.064516, y: 0, z: 0}
+  - {x: -2.7419355, y: 0, z: 0}
+  - {x: -2.419355, y: 0, z: 0}
+  - {x: -2.0967743, y: 0, z: 0}
+  - {x: -1.7741936, y: 0, z: 0}
+  - {x: -1.451613, y: 0, z: 0}
+  - {x: -1.1290324, y: 0, z: 0}
+  - {x: -0.80645174, y: 0, z: 0}
+  - {x: -0.4838711, y: 0, z: 0}
+  - {x: -0.16129047, y: 0, z: 0}
+  - {x: 0.16129017, y: 0, z: 0}
+  - {x: 0.4838708, y: 0, z: 0}
+  - {x: 0.80645144, y: 0, z: 0}
+  - {x: 1.1290321, y: 0, z: 0}
+  - {x: 1.4516127, y: 0, z: 0}
+  - {x: 1.7741933, y: 0, z: 0}
+  - {x: 2.096774, y: 0, z: 0}
+  - {x: 2.4193547, y: 0, z: 0}
+  - {x: 2.7419353, y: 0, z: 0}
+  - {x: 3.0645158, y: 0, z: 0}
+  - {x: 3.3870964, y: 0, z: 0}
+  - {x: 3.7096772, y: 0, z: 0}
+  - {x: 4.032258, y: 0, z: 0}
+  - {x: 4.3548384, y: 0, z: 0}
+  - {x: 4.677419, y: 0, z: 0}
+  - {x: 4.9999995, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -609,6 +588,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &70031551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70031546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827ec486cf939164e89de14a3a76d77b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VShapePlatform2D
+  xStart: -5
+  xEnd: 5
+  resolution: 32
+  m: 0
+  h: 0
+  k: 0
+  formulaText: {fileID: 0}
 --- !u!1 &98903219
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,7 +638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47c1ef82f3551414c9172017aa095a5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ParameterAdjustZone
-  targetBehaviour: {fileID: 70031547}
+  targetBehaviour: {fileID: 0}
   parameterId: h
   minValue: -2
   maxValue: 2
@@ -1046,7 +1044,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47c1ef82f3551414c9172017aa095a5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ParameterAdjustZone
-  targetBehaviour: {fileID: 70031547}
+  targetBehaviour: {fileID: 0}
   parameterId: a
   minValue: -0.11
   maxValue: 0.11
@@ -1456,7 +1454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47c1ef82f3551414c9172017aa095a5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ParameterAdjustZone
-  targetBehaviour: {fileID: 70031547}
+  targetBehaviour: {fileID: 0}
   parameterId: k
   minValue: -2
   maxValue: 2
@@ -1968,7 +1966,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1916852412
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2054,7 +2052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b207cc719551f4648a43079806d3bc9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BridgeFadeByFormula
-  platform: {fileID: 70031547}
+  platform: {fileID: 0}
   bridgeSprite: {fileID: 1916852412}
   targetA: -0.11
   targetH: -0.1
