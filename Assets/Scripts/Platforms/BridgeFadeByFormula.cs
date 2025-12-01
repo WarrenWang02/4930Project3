@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class BridgeFadeByFormula : MonoBehaviour
 {
@@ -18,10 +20,23 @@ public class BridgeFadeByFormula : MonoBehaviour
     [Range(0f, 1f)]
     public float closeness; // normalized fit
 
+    [Header("UI")]
+    public Button nextLevelButton;
+    public float buttonThreshold = 0.74f;
+
     void Reset()
     {
         if (bridgeSprite == null)
             bridgeSprite = GetComponent<SpriteRenderer>();
+    }
+
+    void Start()
+    {
+        if (nextLevelButton != null)
+        {
+            nextLevelButton.gameObject.SetActive(false);
+            nextLevelButton.onClick.AddListener(GoToLevel2);
+        }
     }
 
     void Update()
@@ -29,7 +44,6 @@ public class BridgeFadeByFormula : MonoBehaviour
         if (platform == null || bridgeSprite == null)
             return;
 
-        // 1) Compute closeness based on (a, h, k)
         Vector3 current = new Vector3(platform.a, platform.h, platform.k);
         Vector3 target = new Vector3(targetA, targetH, targetK);
         float distance = Vector3.Distance(current, target);
@@ -37,31 +51,34 @@ public class BridgeFadeByFormula : MonoBehaviour
         if (maxDistance <= 0f)
             maxDistance = 0.0001f;
 
-        // 0 = far (>= maxDistance), 1 = exact match
         closeness = Mathf.Clamp01(1f - distance / maxDistance);
 
-        // 2) Map closeness -> alpha
-        //    0%  fit -> 1% alpha
-        //    50% fit -> 10% alpha
-        //    100% fit -> 100% alpha
         float alpha;
 
         if (closeness <= 0.5f)
         {
-            // 0..0.5 -> 0.01..0.10
-            float t = closeness / 0.5f;   // remap to 0..1
+            float t = closeness / 0.5f;
             alpha = Mathf.Lerp(0.01f, 0.10f, t);
         }
         else
         {
-            // 0.5..1 -> 0.10..1.0
-            float t = (closeness - 0.5f) / 0.5f; // remap to 0..1
+            float t = (closeness - 0.5f) / 0.5f;
             alpha = Mathf.Lerp(0.10f, 1.0f, t);
         }
 
-        // 3) Apply alpha to sprite
         Color c = bridgeSprite.color;
         c.a = alpha;
         bridgeSprite.color = c;
+
+        if (nextLevelButton != null && closeness >= buttonThreshold)
+        {
+            if (!nextLevelButton.gameObject.activeSelf)
+                nextLevelButton.gameObject.SetActive(true);
+        }
+    }
+
+    void GoToLevel2()
+    {
+        SceneManager.LoadScene("Level2");
     }
 }
