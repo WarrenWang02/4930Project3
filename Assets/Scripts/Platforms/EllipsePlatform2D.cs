@@ -11,11 +11,15 @@ public class EllipsePlatform2D : MonoBehaviour, IFloatParameterTarget
     [Range(2, 256)]
     public int resolution = 32;
 
-    [Header("Ellipse: (x^2 / a^2) + ((y - k)^2 / b^2) = 1")]
+    [Header("Ellipse core: (x^2 / a^2) + ((y - k)^2 / b^2) = 1")]
     public float a = 3f;      // horizontal radius
     public float b = 2f;      // vertical radius
-    public float k = 0f;      // vertical shift (center y)
+    public float k = 0f;      // vertical center of ellipse
     public bool useLowerBranch = true; // true = U (bowl), false = arch (∩)
+
+    [Header("Flat sides")]
+    public float flatY = 0f;          // y value of the flat side segments
+    public float flatHalfWidth = 1f;  // L: half-width of the ellipse part (|x| <= L uses ellipse)
 
     [Header("Formula UI")]
     public TextMeshProUGUI formulaText;
@@ -42,9 +46,9 @@ public class EllipsePlatform2D : MonoBehaviour, IFloatParameterTarget
         if (resolution < 2)
             resolution = 2;
 
-        // avoid divide-by-zero
         if (Mathf.Abs(a) < 0.001f) a = 0.001f;
         if (Mathf.Abs(b) < 0.001f) b = 0.001f;
+        if (flatHalfWidth < 0f) flatHalfWidth = 0f;
 
         UpdateShape();
     }
@@ -74,7 +78,7 @@ public class EllipsePlatform2D : MonoBehaviour, IFloatParameterTarget
         for (int i = 0; i < resolution; i++)
         {
             float x = xStart + dx * i;
-            float y = EvaluateEllipseBranch(x);
+            float y = EvaluateCurve(x);
             Vector3 p = new Vector3(x, y, 0f);
 
             positions[i] = p;
@@ -88,29 +92,29 @@ public class EllipsePlatform2D : MonoBehaviour, IFloatParameterTarget
         UpdateFormulaText();
     }
 
-    float EvaluateEllipseBranch(float x)
+    float EvaluateCurve(float x)
     {
-        // t = 1 - (x^2 / a^2)
-        float t = 1f - (x * x) / (a * a);
+        float absX = Mathf.Abs(x);
 
-        // Clamp so we don't get NaN when |x| > a
-        t = Mathf.Max(0f, t);
+        // Inside core region: use half ellipse
+        if (absX <= flatHalfWidth)
+        {
+            // t = 1 - (x^2 / a^2)
+            float t = 1f - (x * x) / (a * a);
+            t = Mathf.Max(0f, t);
 
-        float yOffset = b * Mathf.Sqrt(t);
+            float yOffset = b * Mathf.Sqrt(t);
 
-        // upper or lower branch
-        if (useLowerBranch)
-            return k - yOffset;  // U shape (bowl)
+            if (useLowerBranch)
+                return k - yOffset;   // U shape
+            else
+                return k + yOffset;   // arch
+        }
         else
-            return k + yOffset;  // arch (∩)
-    }
-
-    public void SetParameters(float newA, float newB, float newK)
-    {
-        a = Mathf.Max(0.001f, newA);
-        b = Mathf.Max(0.001f, newB);
-        k = newK;
-        UpdateShape();
+        {
+            // Outside: flat line
+            return flatY;
+        }
     }
 
     void UpdateFormulaText()
@@ -122,19 +126,30 @@ public class EllipsePlatform2D : MonoBehaviour, IFloatParameterTarget
         const string colorAHex = "#FF5555"; // a
         const string colorBHex = "#55FF55"; // b
         const string colorKHex = "#5555FF"; // k
+        const string colorLHex = "#AAAA00"; // L (flatHalfWidth)
+        const string colorFHex = "#FF88FF"; // flatY
 
         string aNum = FormatFloat(a);
         string bNum = FormatFloat(b);
         string kNum = FormatFloat(k);
+        string lNum = FormatFloat(flatHalfWidth);
+        string fNum = FormatFloat(flatY);
 
         string aColored = Colorize(aNum, colorAHex);
         string bColored = Colorize(bNum, colorBHex);
         string kColored = Colorize(kNum, colorKHex);
+        string lColored = Colorize(lNum, colorLHex);
+        string fColored = Colorize(fNum, colorFHex);
 
-        // (x^2 / a^2) + ((y - k)^2 / b^2) = 1
-        string equation = $"(x² / {aColored}²) + ((y - {kColored})² / {bColored}²) = 1";
+        // TMP formula (two lines, piecewise):
+        // (x² / a²) + ((y - k)² / b²) = 1,  |x| ≤ L
+        // y = flatY,                         |x| > L
+        string line1 =
+            $"(x² / {aColored}²) + ((y - {kColored})² / {bColored}²) = 1,  |x| ≤ {lColored}";
+        string line2 =
+            $"y = {fColored},  |x| > {lColored}";
 
-        formulaText.text = equation;
+        formulaText.text = line1 + "\n" + line2;
     }
 
     string FormatFloat(float value)
@@ -147,7 +162,7 @@ public class EllipsePlatform2D : MonoBehaviour, IFloatParameterTarget
         return $"<color={hex}>{text}</color>";
     }
 
-    // IFloatParameterTarget implementation
+    // IFloatParameterTarget: keep a, b, k adjustable via zones (L & flatY tuned in Inspector)
     public float GetParameterValue(string parameterId)
     {
         switch (parameterId)
