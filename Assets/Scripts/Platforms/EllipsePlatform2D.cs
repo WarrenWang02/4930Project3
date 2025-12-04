@@ -170,6 +170,8 @@ public class EllipsePlatform2D : MonoBehaviour, IFloatParameterTarget
             case "a": return a;
             case "b": return b;
             case "k": return k;
+            case "flatHalfWidth": return flatHalfWidth;
+            case "flatY": return flatY;
             default:   return 0f;
         }
     }
@@ -186,6 +188,12 @@ public class EllipsePlatform2D : MonoBehaviour, IFloatParameterTarget
                 break;
             case "k":
                 k = value;
+                break;
+            case "flatHalfWidth":
+                flatHalfWidth = value;
+                break;
+            case "flatY":
+                flatY = value;
                 break;
         }
 

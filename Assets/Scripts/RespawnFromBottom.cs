@@ -29,10 +29,11 @@ public class RespawnFromBottom : MonoBehaviour
         {
             // Keep same X in viewport, move to just above top (y > 1)
             float newViewportY = 1f + extraTopOffset;
+            float mirroredX = 1f - vp.x;
 
             Vector3 newWorldPos =
                 targetCamera.ViewportToWorldPoint(
-                    new Vector3(vp.x, newViewportY, vp.z)
+                    new Vector3(mirroredX, newViewportY, vp.z)
                 );
 
             // Keep original Z so you don't jump in front/behind stuff

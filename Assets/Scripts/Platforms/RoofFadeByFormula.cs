@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class RoofFadeByFormula : MonoBehaviour
 {
     [Header("References")]
-    public VShapePlatform2D platform;      // your roof platform
+    public VShapePlatform2D platform;
     public SpriteRenderer backgroundSprite;
 
     [Header("Target parameters (goal values)")]
@@ -13,16 +15,29 @@ public class RoofFadeByFormula : MonoBehaviour
     public float targetS = 0.58f;
 
     [Header("How strict is the match?")]
-    public float maxDistance = 2.0f;  // bigger = easier to be "close"
+    public float maxDistance = 2.0f;
 
     [Header("Debug: 0 = far, 1 = exact")]
     [Range(0f, 1f)]
     public float closeness;
 
+    [Header("UI")]
+    public Button nextLevelButton;
+    public float buttonThreshold = 0.74f;
+
     void Reset()
     {
         if (backgroundSprite == null)
             backgroundSprite = GetComponent<SpriteRenderer>();
+    }
+
+    void Start()
+    {
+        if (nextLevelButton != null)
+        {
+            nextLevelButton.gameObject.SetActive(false);
+            nextLevelButton.onClick.AddListener(GoToLevel2);
+        }
     }
 
     void Update()
@@ -37,7 +52,6 @@ public class RoofFadeByFormula : MonoBehaviour
         if (maxDistance <= 0f) maxDistance = 0.0001f;
         closeness = Mathf.Clamp01(1f - distance / maxDistance);
 
-        // your piecewise alpha: 0..0.5 -> 1%..10%, 0.5..1 -> 10%..100%
         float alpha;
         if (closeness <= 0.5f)
         {
@@ -53,5 +67,16 @@ public class RoofFadeByFormula : MonoBehaviour
         Color c = backgroundSprite.color;
         c.a = alpha;
         backgroundSprite.color = c;
+
+        if (nextLevelButton != null && closeness >= buttonThreshold)
+        {
+            if (!nextLevelButton.gameObject.activeSelf)
+                nextLevelButton.gameObject.SetActive(true);
+        }
+    }
+
+    void GoToLevel2()
+    {
+        SceneManager.LoadScene("Level3");
     }
 }
